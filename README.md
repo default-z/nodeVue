@@ -24,4 +24,8 @@ mongoose是数据库 cors是允许跨域请求
 
 6.mongoose安装（本地）
 
+7.cd server 安装inflection插件，可以实现CRUD技术（通用增删改查接口），inflection可以将表名复数转成单数并且大写首字母
+
+8.cd server 处理上传图片的中间件，需要安装multer 
+
 

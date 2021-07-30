@@ -37,4 +37,13 @@ module.exports = app => {
     });
 
     app.use('/web/api',router);
+
+
+    const multer = require("multer");
+    const upload = multer({dest:__dirname + "/../../uploads"});
+    app.post('/web/api/upload',upload.single('file'),async (req,res)=>{
+        const file = req.file;//req上本来是没有file属性的 通过multer这个中间件实现的 upload.single代表单张图片
+        file.url = `http://localhost:3000/uploads/${file.filename}`;
+        res.send(file)
+    })
 }

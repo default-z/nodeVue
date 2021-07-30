@@ -4,7 +4,7 @@
         <el-form>
             <el-form-item label="上级分类">
                 <!--<el-input v-model="model.parent"></el-input>-->
-                <el-select v-model="model.parent" placeholder="请选择">
+                <el-select v-model="model.parent" multiple  placeholder="请选择">
                     <el-option
                             v-for="item in options"
                             :key="item._id"
@@ -13,12 +13,27 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+
             <el-form-item label="名称">
                 <el-input v-model="model.name"></el-input>
             </el-form-item>
+
             <el-form-item label="描述">
                 <el-input v-model="model.desc"></el-input>
             </el-form-item>
+
+            <el-form-item label="图标">
+                <el-upload
+                    class="avatar-uploader"
+                    :action="$http.defaults.baseURL + '/upload'"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload">
+                    <img v-if="model.icon" :src="model.icon" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                 </el-upload>
+            </el-form-item>
+
             <el-form-item>
                 <el-button type="primary" @click="save">保存</el-button>
             </el-form-item>
@@ -36,15 +51,20 @@
             return{
                 model:{},
                 options:[]
-                // name:'',
-                // desc:''
             }
         },
         mounted(){
             this.id && this.getDetail();
             this.getOptions();
         },
-        methods:{
+        methods:{       
+            handleAvatarSuccess(res){
+                console.log(res)
+                this.$set(this.model,'icon',res.url)
+            },
+            beforeAvatarUpload(){
+
+            },
            async save(){
                let res;
                if(this.id){
@@ -62,12 +82,10 @@
             },
            async getDetail(){
                const res = await this.$http.get(`getCategoryById/${this.id}`);
-               // console.log(res,111)
                this.model = res.data
             },
             async getOptions(){
                 const res = await this.$http.get('categories');
-                // console.log(res,111)
                 this.options = res.data
             }
             // save(){
@@ -84,6 +102,29 @@
     }
 </script>
 
-<style scoped>
+<style>
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 
 </style>
